@@ -1,14 +1,16 @@
-import os
-
 import structlog
 from kafkian import Consumer
 from kafkian.serde.deserialization import AvroDeserializer
 
-
 logger = structlog.getLogger(__name__)
 
+SCHEMA_REGISTRY_CONFIG = {
+    'KAFKA_BOOTSTRAP_SERVERS': 'localhost:29092',
+    'SCHEMA_REGISTRY_URL': 'http://localhost:8081'
+}
+
 CONSUMER_CONFIG = {
-    'bootstrap.servers': os.environ['KAFKA_BOOTSTRAP_SERVERS'],
+    'bootstrap.servers': SCHEMA_REGISTRY_CONFIG.get('KAFKA_BOOTSTRAP_SERVERS'),
     'default.topic.config': {
         'auto.offset.reset': 'earliest',
     },
@@ -29,8 +31,8 @@ def handler():
     consumer = Consumer(
         CONSUMER_CONFIG,
         topics=['location_ingress'],
-        key_deserializer=AvroDeserializer(schema_registry_url=os.environ['SCHEMA_REGISTRY_URL']),
-        value_deserializer=AvroDeserializer(schema_registry_url=os.environ['SCHEMA_REGISTRY_URL']),
+        key_deserializer=AvroDeserializer(SCHEMA_REGISTRY_CONFIG.get('SCHEMA_REGISTRY_URL')),
+        value_deserializer=AvroDeserializer(SCHEMA_REGISTRY_CONFIG.get('SCHEMA_REGISTRY_URL')),
     )
 
     for message in consumer:
