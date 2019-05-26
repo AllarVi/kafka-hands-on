@@ -16,7 +16,7 @@ https://medium.com/@saabeilin/kafka-hands-on-part-ii-producing-and-consuming-mes
 
 https://medium.com/@tomaszdudek/yet-another-scalable-apache-airflow-with-docker-example-setup-84775af5c451
 
-## Airflow Setup
+## Dockerized Jupyter Setup
 
 pyenv activate airflow_jupyter
 
@@ -28,6 +28,8 @@ papermill task_1/code.ipynb task_1/output/code_exectuion_1.ipynb -f task_1/param
 
 docker build . -t task1
 
+docker build . -t task2
+
 #### Run dockerized jupyter notebook
 
 docker run -it -e EXECUTION_ID=444444 task1
@@ -36,6 +38,16 @@ docker run -it -e EXECUTION_ID=444444 task1
 
 docker cp <id_of_container>:/notebook/output/code_execution_444444.ipynb ./
 
+## Airflow Setup
+
+export AIRFLOW_GPL_UNIDECODE=yes
+
+* initialize the database (in airflow webserver)
+	airflow initdb 
+
+### Airflow UI - http://localhost:8080/admin/
+
+docker build . -t puckel-airflow-with-docker-inside
 
 
 
