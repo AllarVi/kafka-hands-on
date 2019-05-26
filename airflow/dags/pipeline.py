@@ -20,9 +20,35 @@ def read_xcoms(**context):
 
 
 def launch_docker_container(**context):
-    # just a mock for now
-    logging.info(context['ti'])
-    logging.info(context['image_name'])
+    image_name = context['image_name']
+    client = docker.from_env()
+
+    logging.info(f"Creating image {image_name}")
+    container = client.containers.run(detach=True, image=image_name)
+
+    container_id = container.id
+    logging.info(f"Running container with id {container_id}")
+    container.start()
+
+    logs = container.logs(follow=True, stderr=True, stdout=True, stream=True, tail='all')
+
+    try:
+        while True:
+            line = next(logs)
+            logging.info(f"Task log: {line}")
+    except StopIteration:
+        pass
+
+    logging.info("Inspecting container")
+
+    inspect = client.api.inspect_container(container_id)
+    logging.info(f"Inspection: {inspect}")
+
+    if inspect['State']['ExitCode'] != 0:
+        raise Exception("Container has not finished with exit code 0")
+
+    logging.info(f"Task ends!")
+
     my_id = context['my_id']
     context['task_instance'].xcom_push('data', f'my name is {my_id}', context['execution_date'])
 
