@@ -1,15 +1,18 @@
 ansiwrap==0.8.4
 appnope==0.1.0
 attrs==19.1.0
+avro-python3==1.9.0
 backcall==0.1.0
 bleach==3.1.0
 certifi==2019.3.9
 chardet==3.0.4
 Click==7.0
+confluent-kafka==1.0.0
 cycler==0.10.0
 decorator==4.4.0
 defusedxml==0.6.0
 entrypoints==0.3
+fastavro==0.21.23
 future==0.17.1
 idna==2.8
 ipykernel==5.1.1
@@ -23,6 +26,7 @@ jupyter==1.0.0
 jupyter-client==5.2.4
 jupyter-console==6.0.0
 jupyter-core==4.4.0
+kafkian==0.10.0
 kiwisolver==1.1.0
 MarkupSafe==1.1.1
 matplotlib==3.1.0
@@ -52,6 +56,7 @@ qtconsole==4.5.0
 requests==2.22.0
 Send2Trash==1.5.0
 six==1.12.0
+structlog==19.1.0
 tenacity==5.0.4
 terminado==0.8.2
 testpath==0.4.2

@@ -9,7 +9,7 @@ from airflow.operators.python_operator import PythonOperator
 
 default_args = {
     'owner': 'airflow',
-    'start_date': datetime(2019, 5, 26),
+    'start_date': datetime(2019, 5, 27),
 }
 
 
@@ -24,7 +24,10 @@ def launch_docker_container(**context):
     client = docker.from_env()
 
     logging.info(f"Creating image {image_name}")
-    container = client.containers.run(detach=True, image=image_name)
+
+    # set network='host' since kafka cluster sits in its own separate docker network and
+    # also exposes :29092 to host network.
+    container = client.containers.run(detach=True, image=image_name, network='host')
 
     container_id = container.id
     logging.info(f"Running container with id {container_id}")
